@@ -8,7 +8,7 @@ const crypto = require('crypto');
 
 const yt2mp3 = require('./scripts/yt2mp3');
 
-const firebase = require('firebase')
+const firebase = require('firebase-admin')
 // init firebase
 
 let config = null;
@@ -23,12 +23,15 @@ if (process.env.NODE_ENV === 'production') {
     messagingSenderId: process.env.FIREBASE_MESSAGINGSENDERID
   }
 } else {
-  config = require('./config/secrets.json');
+  config = require('./config/slapdash-admin.json');
 }
 console.log(config);
 
-
-firebase.initializeApp(config)
+// Initialize the app with a service account, granting admin privileges
+firebase.initializeApp({
+  credential: firebase.credential.cert(config),
+  databaseURL: config.databaseURL,
+});
 
 const database = firebase.database()
 
@@ -66,7 +69,11 @@ app.get('/status', (req, res) => {
     });
   } else {
     database.ref(`jobs/${id}`).once('value').then((val) => {
-      res.send(val.val().progress);
+      try {
+        res.send(val.val().progress);
+      } catch (err) {
+        res.send(err.message);
+      }
     });
   }
 });

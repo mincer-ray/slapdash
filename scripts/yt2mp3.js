@@ -9,13 +9,11 @@ const toMp3 = (url, name, database) => {
   let start = Date.now();
 
   let stream = ytdl(url, {
-    // quality: 'highestaudio',
-    format: 'best',
+    quality: 'highestaudio',
   });
   
   return ytdl.getInfo(url, {
-    // quality: 'highestaudio',
-    format: 'best',
+    quality: 'highestaudio',
   }).then((data) => {
     const totalTime = parseInt(data.player_response.videoDetails.lengthSeconds, 10);
 
