@@ -14,14 +14,7 @@ const firebase = require('firebase-admin')
 let config = null;
 console.log(process.env.NODE_ENV)
 if (process.env.NODE_ENV === 'production') {
-  config = {
-    apiKey: process.env.FIREBASE_APIKEY,
-    authDomain: process.env.FIREBASE_AUTHDOMAIN,
-    databaseURL: process.env.FIREBASE_DATABASEURL,
-    projectId: process.env.FIREBASE_PROJECTID,
-    storageBucket: process.env.FIREBASE_STORAGEBUCKET,
-    messagingSenderId: process.env.FIREBASE_MESSAGINGSENDERID
-  }
+  config = JSON.parse(process.env.SECRETS)
 } else {
   config = require('./config/slapdash-admin.json');
 }
